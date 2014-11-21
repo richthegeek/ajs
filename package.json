@@ -1,0 +1,8 @@
+{
+  "name": "ast_eval",
+  "version": "0.0.1",
+  "dependencies": {
+    "acorn": "^0.9.0"
+  },
+  "main": "lib/index.js"
+}
