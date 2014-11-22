@@ -65,4 +65,14 @@ describe('Basic', function () {
 			target: {age: 20}
 		})
 	})
+
+	it('run multiple lines', function (done) {
+		test({
+			done: done,
+			input: 'x = "foo"; y = "bar"; z = x + y',
+			test: function (result) {
+				assert.equal(this.context.z, "foobar")
+			}
+		})
+	})
 })

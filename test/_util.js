@@ -27,12 +27,12 @@ module.exports = function (obj) {
 		if (!err) {
 			if (obj.test) {
 				if (obj.test_async) {
-					return obj.test(result, function (err, ok) {
+					return obj.test.call(obj, result, function (err, ok) {
 						assert(ok, 'test(result) returned false')
 						obj.done(err)
 					})
 				}
-				assert(obj.test(result), 'test(result) returned false')
+				assert(obj.test.call(obj, result) !== false, 'test(result) returned false')
 				if (typeof obj.output !== 'undefined') {
 					assert.equal(result, obj.output);
 				}

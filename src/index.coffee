@@ -26,7 +26,13 @@ module.exports = class Evaluator
 		hash = require('crypto').createHash('md5').update(string).digest('hex')
 		ast = Evaluator.cache[hash] || ast = acorn.parse string, @options
 		
-		@recurse ast.body[0], ast, callback, callback
+		evalLine = (line, next) =>
+			@recurse line, ast, next, next
+
+		@each ast.body, evalLine, (err, rows) ->
+			if Array.isArray rows
+				return callback err, rows[rows.length - 1]
+			callback err, rows
 
 	recurse: (node, parent, failback, callback) ->
 		fn = @nodes[node.type]
