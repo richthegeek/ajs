@@ -9,5 +9,35 @@ module.exports = (node, callback) ->
 				callback null, left * right
 			when '/'
 				callback null, left / right
+
+			when '=='
+				callback null, `left == right`
+
+			when '==='
+				callback null, `left === right`
+			
+			when '!='
+				callback null, `left != right`
+
+			when '!=='
+				callback null, `left !== right`
+
+			when '<'
+				callback null, left < right
+
+			when '<='
+				callback null, left <= right
+
+			when '>'
+				callback null, left > right
+
+			when '>='
+				callback null, left >= right
+
+			when '<'
+				callback null, left < right
+
+
+
 			else
 				callback 'Undefined BinaryExpression operator: ' + node.operator

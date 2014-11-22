@@ -9,8 +9,14 @@ module.exports = (node, callback) ->
 			when '+'
 				callback null, +argument
 
+			when '!'
+				callback null, !argument
+
 			when 'typeof'
 				callback null, typeof argument
+
+			when 'void'
+				callback null, undefined
 
 			else
 				callback 'Undefined UnaryExpression operator: ' + node.operator
