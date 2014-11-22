@@ -35,11 +35,7 @@ module.exports = (node, callback) ->
 				else
 					return callback 'AssignmentExpression: unknown operator ' + node.operator
 
-			target[property.name] = value
-
-			callback null, target[property.name]
-			
-
+			@set property.name, target, value, callback
 
 	if node.left.type is 'Identifier'
 		set @context, node.left

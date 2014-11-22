@@ -77,6 +77,27 @@ module.exports = class Evaluator
 			if err then failback err, res
 			callback null, res
 
+	set: (key, target, value, callback) ->
+		if target?.__set?
+			fn = target.__set.bind(target)
+		else
+			fn = (key, value, callback) ->
+				target[key] = value
+				callback null, value
+
+		fn key, value, callback
+
+	unset: (key, target, callback) ->
+		if target?.__unset?
+			fn = target.__unset.bind(target)
+		else
+			fn = (key, target, callback) ->
+				delete target[key]
+				callback()
+
+		fn key, target, callback
+
+
 class Evaluator.Return
 	constructor: (@value) ->
 		null

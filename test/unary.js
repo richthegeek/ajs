@@ -27,8 +27,8 @@ describe('Unary', function () {
 			done: done,
 			input: 'void(x = 4)',
 			test: function (result) {
-				assert.equal(result, undefined)
-				assert.equal(this.context.x, 4)
+				assert.equal(result, undefined, 'Void did not return "undefined"')
+				assert.equal(this.context.x, 4, 'Did not execute expression properly')
 			}
 		})
 	})
@@ -37,6 +37,18 @@ describe('Unary', function () {
 		test({
 			done: done,
 			input: 'typeof 13'
+		})
+	})
+
+	it('delete', function (done) {
+		test({
+			done: done,
+			context: {foo: '42'},
+			input: 'delete foo',
+			output: true,
+			test: function (result) {
+				assert.equal(this.context.foo, undefined, 'Failed to delete "foo" from context')
+			}
 		})
 	})
 })

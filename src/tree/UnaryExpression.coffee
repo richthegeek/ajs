@@ -1,7 +1,7 @@
 module.exports = (node, callback) ->
 
 	node.argument.parent = node
-	@recurse node.argument, node, callback, (err, argument) ->
+	@recurse node.argument, node, callback, (err, argument) =>
 		switch node.operator
 			when '-'
 				callback null, -argument
@@ -17,6 +17,10 @@ module.exports = (node, callback) ->
 
 			when 'void'
 				callback null, undefined
+
+			when 'delete'
+
+				@unset node.argument.name, node.context, (err) -> callback err, true
 
 			else
 				callback 'Undefined UnaryExpression operator: ' + node.operator
