@@ -3,8 +3,6 @@ module.exports = (node, callback) ->
 		if property.type isnt 'Identifier'
 			return callback 'AssignmentExpression: property is not an Identifier?'
 
-		# property = property.name
-
 		@recurseAll [property, node.right], node, callback, (err, [old_value, new_value]) =>
 			switch node.operator
 				when '='
