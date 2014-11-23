@@ -1,5 +1,5 @@
 module.exports = (node, callback) ->
-	set = (target, property) =>
+	set = (property) =>
 		if property.type isnt 'Identifier'
 			return callback 'AssignmentExpression: property is not an Identifier?'
 
@@ -33,14 +33,15 @@ module.exports = (node, callback) ->
 				else
 					return callback 'AssignmentExpression: unknown operator ' + node.operator
 
-			@set property.name, target, value, callback
+			property.context.set property.name, value, callback
 
 	if node.left.type is 'Identifier'
-		set @context, node.left
+		set node.left
 
 	else if node.left.type is 'MemberExpression'
-		@recurse node.left.object, node, callback, (err, object) ->
-			set object, node.left.property
+		@recurse node.left.object, node, callback, (err, object) =>
+			node.left.property.context = new @constructor.Context node.left.object.context, object
+			set node.left.property
 
 	else
 		callback 'AssignmentExpression: unknown left type ' + node.left.type

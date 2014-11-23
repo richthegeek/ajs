@@ -19,7 +19,7 @@ module.exports = (node, callback) ->
 				callback null, undefined
 
 			when 'delete'
-				@unset node.argument.name, node.context, (err) -> callback err, true
+				node.context.unset node.argument.name, (err) -> callback err, true
 
 			else
 				callback 'Undefined UnaryExpression operator: ' + node.operator

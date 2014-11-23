@@ -24,7 +24,7 @@ module.exports = function (it) {
 				}).call(obj.context.this)
 			}
 
-			ast_obj = new ast(obj.target, obj.context, obj.options)
+			ast_obj = new ast(obj.context, obj.options)
 			ast_obj.eval(obj.input, function(err, result) {
 				obj.err = err
 				obj.result = result

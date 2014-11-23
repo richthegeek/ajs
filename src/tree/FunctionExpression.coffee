@@ -4,11 +4,12 @@ module.exports = (node, callback) ->
 	params = node.params.map (param) -> param.name
 
 	fn = (param_values..., callback) ->
-		node.context = JSON.parse JSON.stringify node.context
+		args = {}
 		params.forEach (key, i) ->
-			node.context[key] = param_values[i]
+			args[key] = param_values[i]
+		node.context = new Evaluator.Context node.context, args
 
-		vm = new Evaluator @target, node.context, {inferCallbacks: self.options.inferCallbacks, allowReturnOutsideFunction: true}
+		vm = new Evaluator node.context, {inferCallbacks: self.options.inferCallbacks, allowReturnOutsideFunction: true}
 		
 		cb = (err, [results...]) ->
 			result = results.pop()

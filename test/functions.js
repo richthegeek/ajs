@@ -28,6 +28,18 @@ describe('Function', function () {
 		context: {
 			name: 'bob'
 		},
-		input: '(function () { return name; })()'
+		input: '(function () { return name; })()',
+	})
+
+	test({
+		context: {
+			top: 10,
+			middle: 20
+		},
+		input: '(function (middle) { return bottom = 2 * middle; })(15)',
+		test: function (result) {
+			assert.equal(this.context.middle, 20, 'Parent context was modified')
+			assert.equal(this.context.bottom, undefined, 'Child context set incorrectly on parent context')
+		}
 	})
 })

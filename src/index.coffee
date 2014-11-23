@@ -11,9 +11,13 @@ fs.readdirSync(dir).forEach (file) ->
 
 module.exports = class Evaluator
 
-	constructor: (@target, @context = {}, @options = {}) ->
+	constructor: (context = {}, @options = {}) ->
+		context.this ?= {}
+		if context instanceof Evaluator.Context
+			@context = context
+		else
+			@context = new Evaluator.Context null, context
 		@options.inferCallbacks ?= true
-		@context.this ?= target
 
 		@nodes = {}
 		for type, fn of nodes
@@ -65,37 +69,41 @@ module.exports = class Evaluator
 				next i + 1
 		next(0)
 
-	get: (keys, source, failback, callback) ->
+class Evaluator.Context
+	constructor: (@parent, @data = {}) ->
+		@keys = {}
+		Object.keys(@data).forEach (k) => @keys[k] = true
+		null
 
-		if source?.__get?
-			fn = source.__get.bind(source)
-		else
-			fn = (key, next) =>
-				next null, source[key]
+	get: (key, callback) ->
+		if @keys[key]
+			return callback null, @data[key]
 
-		@each keys, fn, (err, res) ->
-			if err then failback err, res
-			callback null, res
+		if @parent
+			return @parent.get key, callback
 
-	set: (key, target, value, callback) ->
-		if target?.__set?
-			fn = target.__set.bind(target)
-		else
-			fn = (key, value, callback) ->
-				target[key] = value
-				callback null, value
+		return callback null, undefined
 
-		fn key, value, callback
+	set: (key, value, callback) ->
+		target = @
+		while target
+			if target.keys[key]
+				return callback null, target.data[key] = value
+			target = target.parent
 
-	unset: (key, target, callback) ->
-		if target?.__unset?
-			fn = target.__unset.bind(target)
-		else
-			fn = (key, target, callback) ->
-				delete target[key]
-				callback()
+		@keys[key] = true
+		return callback null, @data[key] = value
 
-		fn key, target, callback
+	unset: (key, callback) ->
+		target = @
+		while target
+			if target.keys[key]
+				target.keys[key] = false
+				return callback null, delete target.data[key]
+			target = target.parent
+
+		@keys[key] = false
+		return callback null, delete @data[key]	
 
 
 class Evaluator.Return

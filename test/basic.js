@@ -5,7 +5,7 @@ describe('Basic', function () {
 	test({
 		input: 'this',
 		output: target,
-		target: target
+		context: {this: target}
 	})
 
 	test('null')
@@ -26,7 +26,7 @@ describe('Basic', function () {
 
 	test({
 		input: 'this.age',
-		target: {age: 20}
+		context: {this: {age: 20}}
 	})
 
 	test({

@@ -1,2 +1,2 @@
 module.exports = (node, callback) ->
-	callback null, @context.this
+	node.context.get 'this', callback
