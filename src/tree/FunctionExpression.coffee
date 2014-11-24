@@ -7,6 +7,7 @@ module.exports = (node, callback) ->
 		args = {}
 		params.forEach (key, i) ->
 			args[key] = param_values[i]
+		args.arguments = arguments
 		node.context = new Evaluator.Context node.context, args
 
 		vm = new Evaluator node.context, {inferCallbacks: self.options.inferCallbacks, allowReturnOutsideFunction: true}
