@@ -9,20 +9,15 @@ describe('Unary', function () {
 	
 	test('typeof 13')
 
-	test({
-		input: 'void(x = 4)',
-		test: function (result) {
+	test('void(x = 4)')
+		.test(function (result) {
 			assert.equal(result, undefined, 'Void did not return "undefined"')
 			assert.equal(this.context.x, 4, 'Did not execute expression properly')
-		}
-	})
+		})
 
-	test({
-		context: {foo: '42'},
-		input: 'delete foo',
-		output: true,
-		test: function (result) {
+	test('delete foo')
+		.context({foo: '42'})
+		.test(function (result) {
 			assert.equal(this.context.foo, undefined, 'Failed to delete "foo" from context')
-		}
-	})
+		})
 })

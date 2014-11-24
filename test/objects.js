@@ -1,8 +1,6 @@
 describe('Objects', function() {
 	test = require('./_util')(it)
 
-	test({
-		cmp: 'json',
-		input: 'person = {name: "Richard", "age": 25}'
-	})
+	test('person = {name: "Richard", "age": 25}')
+		.cmp('json')
 })

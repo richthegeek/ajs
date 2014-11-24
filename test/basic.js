@@ -2,11 +2,10 @@
 describe('Basic', function () {
 	test = require('./_util')(it)
 	target = {x: 5}
-	test({
-		input: 'this',
-		output: target,
-		context: {this: target}
-	})
+
+	test('this')
+		.output(target)
+		.context({this: target})
 
 	test('null')
 
@@ -14,25 +13,20 @@ describe('Basic', function () {
 
 	test('"foo"')
 
-	test({
-		input: 'number',
-		context: {number: 5}
-	})
+	test('reg = /.*/')
+		.cmp('string')
 
-	test({
-		input: 'person.age * 5',
-		context: {person: {age: 20}}
-	})
+	test('number')
+		.context({number: 5})
 
-	test({
-		input: 'this.age',
-		context: {this: {age: 20}}
-	})
+	test('person.age * 5')
+		.context({person: {age: 20}})
 
-	test({
-		input: 'x = "foo"; y = "bar"; z = x + y',
-		test: function (result) {
+	test('this.age')
+		.context({this: {age: 20}})
+
+	test('x = "foo"; y = "bar"; z = x + y')
+		.test(function (result) {
 			assert.equal(this.context.z, "foobar")
-		}
-	})
+		})
 })
