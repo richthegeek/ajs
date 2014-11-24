@@ -32,4 +32,32 @@ describe('Function', function () {
 			assert.equal(this.context.middle, 20, 'Parent context was modified')
 			assert.equal(this.context.bottom, undefined, 'Child context set incorrectly on parent context')
 		})
+
+	test('person = new Person("Richard")')
+		.context({
+			Person: function (name) { this.name = name; }
+		})
+		.cmp('json')
+
+	test('person = new Person("Richard"); person.name();')
+		.context({
+			Person: (function() {
+				Person.name = 'Person';
+
+				function Person(name) {
+					this._name = name;
+				}
+
+				Person.prototype.name = function(name) {
+					if (name) this._name = name;
+					return this._name;
+				};
+
+				return Person;
+			})()
+		})
+		.cmp('json')
+
+
+
 })
